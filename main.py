@@ -13,11 +13,7 @@ comparing your current balance to yesterday's balance.
 """
 
 # First, open the API connection
-api = tradeapi.REST(
-    'PKQYKLCSI9ZKRMXDZNMM',
-    'Uu2caxZ3FZf1aaE8n5Ly0KFjOM50RvzcucxKiHy8',
-    'https://paper-api.alpaca.markets'
-)
+api = tradeapi.REST()
 
 # Get account info
 account = api.get_account()
@@ -32,34 +28,21 @@ print('${} is available as buying power.'.format(account.buying_power))
 # Check our current balance vs. our balance at the last market close
 balance_change = float(account.equity) - float(account.last_equity)
 print(f'Today\'s portfolio balance change: ${balance_change}')
-    
-# Check if AAPL is tradable on the Alpaca platform.
-aapl_asset = api.get_asset('AAPL')
-if aapl_asset.tradable:
-    print('We can trade AAPL.')
+ 
+ 
+symbol = 'AAPL'
+symbol_bars = api.get_barset(symbol, 'minute', 1).df.iloc[0]
+symbol_price = symbol_bars[symbol]['close']
 
-# Check if the market is open now.
-clock = api.get_clock()
-print('The market is {}'.format('open.' if clock.is_open else 'closed.'))
-
-# Check when the market was open on Dec. 1, 2018
-# date = '2021-02-08'
-# calendar = api.get_calendar(start=date, end=date)[0]
-# print('The market opened at {} and closed at {} on {}.'.format(
-#     calendar.open,
-#     calendar.close,
-#     date
-# ))    
-    
-# Get daily price data for AAPL over the last 5 trading days.
-barset = api.get_barset('AAPL', '1Min', limit=10)
-aapl_bars = barset['AAPL']
-
-# See how much AAPL moved in that timeframe.
-week_open = aapl_bars[0].o
-week_close = aapl_bars[-1].c
-percent_change = (week_close - week_open) / week_open * 100
-print('AAPL moved {}% over the last 5 days'.format(percent_change))  
-
-
-  
+# We could buy a position and add a stop-loss and a take-profit of 5 %
+api.submit_order(
+    symbol=symbol,
+    qty=1,
+    side='buy',
+    type='market',
+    time_in_force='gtc',
+    order_class='bracket',
+    stop_loss={'stop_price': symbol_price * 0.95,
+               'limit_price':  symbol_price * 0.94},
+    take_profit={'limit_price': symbol_price * 1.05}
+)
