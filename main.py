@@ -51,3 +51,5 @@ api.submit_order(
                'limit_price':  symbol_price * 0.94},
     take_profit={'limit_price': symbol_price * 1.05}
 )
+
+
