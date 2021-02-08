@@ -43,13 +43,13 @@ clock = api.get_clock()
 print('The market is {}'.format('open.' if clock.is_open else 'closed.'))
 
 # Check when the market was open on Dec. 1, 2018
-date = '2021-02-08'
-calendar = api.get_calendar(start=date, end=date)[0]
-print('The market opened at {} and closed at {} on {}.'.format(
-    calendar.open,
-    calendar.close,
-    date
-))    
+# date = '2021-02-08'
+# calendar = api.get_calendar(start=date, end=date)[0]
+# print('The market opened at {} and closed at {} on {}.'.format(
+#     calendar.open,
+#     calendar.close,
+#     date
+# ))    
     
 # Get daily price data for AAPL over the last 5 trading days.
 barset = api.get_barset('AAPL', '1Min', limit=10)
