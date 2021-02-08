@@ -13,7 +13,12 @@ comparing your current balance to yesterday's balance.
 """
 
 # First, open the API connection
-api = tradeapi.REST()
+# api = tradeapi.REST()
+api = tradeapi.REST(
+    'PKQYKLCSI9ZKRMXDZNMM',
+    'Uu2caxZ3FZf1aaE8n5Ly0KFjOM50RvzcucxKiHy8',
+    'https://paper-api.alpaca.markets'
+)
 
 # Get account info
 account = api.get_account()
